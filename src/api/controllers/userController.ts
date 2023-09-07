@@ -31,18 +31,16 @@ const userGet = async (
       return;
     }
 
-    const user = await UserModel.findById(req.params.id).select('-__v');
+    const user = await UserModel.findById(req.params.id).select(
+      '-password -__v'
+    );
+
     if (!user) {
       next(new CustomError('User not found', 404));
       return;
     }
 
-    const userOutput: UserOutput = {
-      _id: user._id,
-      user_name: user.user_name,
-      email: user.email,
-    };
-    res.json(userOutput);
+    res.json(user);
   } catch (error) {
     next(new CustomError('Something went wrong with the server', 500));
   }
